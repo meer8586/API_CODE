@@ -1,0 +1,38 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: hpa
+spec:
+  selector:
+    matchLabels:
+      run: hpa
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        run: hpa
+    spec:
+      containers:
+      - name: api
+        image: arbindchauhan/services_api:api
+        ports:
+        - containerPort: 5000
+        resources:
+          requests:
+            memory: "64Mi"
+            cpu: "125m"
+          limits:
+            memory: "256Mi"
+            cpu: "500m"
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: hpa
+  labels:
+    run: hpa
+spec:
+  ports:
+  - port: 5000
+  selector:
+    run: hpa

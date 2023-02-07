@@ -1,0 +1,31 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: hpa-front
+spec:
+  selector:
+    matchLabels:
+      run: hpa-front
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        run: hpa-front
+    spec:
+      containers:
+      - name: api
+        image: dhiraj30/workload_profiler_ui:frontend_workload
+        ports:
+        - containerPort: 3000
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: hpa-front
+  labels:
+    run: hpa-front
+spec:
+  ports:
+  - port: 3000
+  selector:
+    run: hpa-front
